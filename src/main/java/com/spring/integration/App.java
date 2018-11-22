@@ -35,8 +35,9 @@ public class App {
 
         try {
             jmsSender.sendMessage("Hi");
-            String message = jmsReceiver.receiveMessage();
-            System.out.println("Consumer receives " + message);
+            jmsSender.sendMessage("Hi Receiver");
+            jmsReceiver.receiveMessage();
+            jmsReceiver.receiveMessage();
         } finally {
             broker.stop();
             context.close();

@@ -19,6 +19,9 @@ public class JMSReceiver {
 
     public String receiveMessage() throws JMSException {
         TextMessage textMessage = (TextMessage) jmsTemplate.receive(destination);
-        return textMessage.getText();
+        String message = textMessage.getText();
+        System.out.println("Receiver receives :: "+message);
+        textMessage.acknowledge();
+        return message;
     }
 }

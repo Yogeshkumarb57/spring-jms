@@ -20,7 +20,7 @@ public class JMSSender {
     private Destination destination;
 
     public void sendMessage(final String msg) {
-        System.out.println("Producer sends " + msg);
+        System.out.println("Sender sends :: " + msg);
         jmsTemplate.send(destination, new MessageCreator() {
             public Message createMessage(Session session) throws JMSException {
                 return session.createTextMessage(msg);
