@@ -25,6 +25,7 @@ public class PersonMessageConvertor implements MessageConverter {
     public Object fromMessage(javax.jms.Message message) throws JMSException, MessageConversionException {
         MapMessage mapMessage = (MapMessage) message;
         Person person = new Person(mapMessage.getString("name"), mapMessage.getInt("age"));
+        mapMessage.acknowledge();
         return person;
     }
 

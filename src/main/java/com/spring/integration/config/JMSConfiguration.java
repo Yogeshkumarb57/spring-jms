@@ -36,6 +36,7 @@ public class JMSConfiguration {
     @Bean
     public JmsTemplate jmsTemplate() {
         JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory());
+        jmsTemplate.setReceiveTimeout(10000);
         jmsTemplate.setMessageConverter(messageConverter);
         return jmsTemplate;
     }
