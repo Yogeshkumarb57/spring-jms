@@ -2,6 +2,7 @@ package com.spring.integration;
 
 import com.spring.integration.config.JMSConfiguration;
 import com.spring.integration.constants.JMSConstant;
+import com.spring.integration.model.Person;
 import com.spring.integration.utils.JMSReceiver;
 import com.spring.integration.utils.JMSSender;
 import org.apache.activemq.broker.BrokerFactory;
@@ -9,6 +10,7 @@ import org.apache.activemq.broker.BrokerService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.net.URI;
+import java.util.HashMap;
 
 public class App {
 
@@ -31,13 +33,16 @@ public class App {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello JMS World!");
 
         try {
             jmsSender.sendMessage("Hi");
-            jmsSender.sendMessage("Hi Receiver");
-            jmsReceiver.receiveMessage();
-            jmsReceiver.receiveMessage();
+            jmsSender.sendMessage("Hello JMS World!");
+            jmsReceiver.receiveTextMessage();
+            jmsReceiver.receiveTextMessage();
+
+            //send map message
+            jmsSender.sendMessage(new Person("yogesh",23));
+            jmsReceiver.receivePersonMessage();
         } finally {
             broker.stop();
             context.close();
