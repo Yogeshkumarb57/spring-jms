@@ -8,9 +8,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.listener.DefaultMessageListenerContainer;
+import org.springframework.jms.listener.MessageListenerContainer;
 import org.springframework.jms.support.converter.MessageConverter;
 
 import javax.jms.ConnectionFactory;
+import javax.jms.MessageListener;
 import javax.jms.Queue;
 
 @Configuration
@@ -19,6 +22,9 @@ public class JMSConfiguration {
 
     @Autowired
     private MessageConverter messageConverter;
+
+    @Autowired
+    private MessageListener messageListener;
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -39,5 +45,17 @@ public class JMSConfiguration {
         jmsTemplate.setReceiveTimeout(10000);
         jmsTemplate.setMessageConverter(messageConverter);
         return jmsTemplate;
+    }
+
+    @Bean
+    public MessageListenerContainer messageListenerContainer(){
+        DefaultMessageListenerContainer container=new DefaultMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory());
+        container.setDestination(queue());
+        container.setMessageListener(messageListener);
+        container.setMessageConverter(messageConverter);
+        container.initialize();
+        container.start();
+        return container;
     }
 }
