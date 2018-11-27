@@ -34,8 +34,8 @@ public class App {
         context = new AnnotationConfigApplicationContext(JMSConfiguration.class);
         jmsSender = (JMSSender) context.getBean(JMSSender.class);
         jmsReceiver = (JMSReceiver) context.getBean(JMSReceiver.class);
+
         messageListenerContainer=(MessageListenerContainer)context.getBean(MessageListenerContainer.class);
-        jmsSessonAwareMessageListener=(JmsSessonAwareMessageListener)context.getBean(JmsSessonAwareMessageListener.class);
     }
 
     public static void main(String[] args) throws Exception {
@@ -61,6 +61,7 @@ public class App {
             e.printStackTrace();
         }finally {
             messageListenerContainer.stop();
+
             broker.stop();
             context.close();
         }
