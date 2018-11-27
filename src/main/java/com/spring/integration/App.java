@@ -2,6 +2,7 @@ package com.spring.integration;
 
 import com.spring.integration.config.JMSConfiguration;
 import com.spring.integration.constants.JMSConstant;
+import com.spring.integration.listener.JmsSessonAwareMessageListener;
 import com.spring.integration.model.Person;
 import com.spring.integration.utils.JMSReceiver;
 import com.spring.integration.utils.JMSSender;
@@ -20,6 +21,7 @@ public class App {
     private static AnnotationConfigApplicationContext context;
     private static BrokerService broker;
     private static MessageListenerContainer messageListenerContainer;
+    private static JmsSessonAwareMessageListener jmsSessonAwareMessageListener;
 
     static {
         try {
@@ -33,6 +35,7 @@ public class App {
         jmsSender = (JMSSender) context.getBean(JMSSender.class);
         jmsReceiver = (JMSReceiver) context.getBean(JMSReceiver.class);
         messageListenerContainer=(MessageListenerContainer)context.getBean(MessageListenerContainer.class);
+        jmsSessonAwareMessageListener=(JmsSessonAwareMessageListener)context.getBean(JmsSessonAwareMessageListener.class);
     }
 
     public static void main(String[] args) throws Exception {
@@ -58,7 +61,6 @@ public class App {
             e.printStackTrace();
         }finally {
             messageListenerContainer.stop();
-
             broker.stop();
             context.close();
         }

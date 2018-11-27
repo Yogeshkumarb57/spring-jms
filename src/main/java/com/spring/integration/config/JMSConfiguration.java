@@ -4,12 +4,14 @@ import com.spring.integration.constants.JMSConstant;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.jms.listener.MessageListenerContainer;
+import org.springframework.jms.listener.SessionAwareMessageListener;
 import org.springframework.jms.support.converter.MessageConverter;
 
 import javax.jms.ConnectionFactory;
@@ -24,7 +26,11 @@ public class JMSConfiguration {
     private MessageConverter messageConverter;
 
     @Autowired
-    private MessageListener messageListener;
+    private MessageListener jmsMessageListener;
+
+    @Autowired
+    private SessionAwareMessageListener jmsSessonAwareMessageListener;
+
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -52,7 +58,7 @@ public class JMSConfiguration {
         DefaultMessageListenerContainer container=new DefaultMessageListenerContainer();
         container.setConnectionFactory(connectionFactory());
         container.setDestination(queue());
-        container.setMessageListener(messageListener);
+        container.setMessageListener(jmsMessageListener);
         container.setMessageConverter(messageConverter);
         container.initialize();
         container.start();
